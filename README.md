@@ -27,7 +27,57 @@ A modern AI-powered web application that transforms videos into engaging movie r
 | TTS | gTTS (Google Text-to-Speech) |
 | Video | FFmpeg, yt-dlp |
 
-## Getting Started
+## Running on Replit
+
+This project is pre-configured for Replit. Just click **Run** and everything starts automatically.
+
+### Quick Start (Replit)
+
+1. Click the **Run** button — `start.sh` launches both services
+2. The Replit preview opens the frontend on port 3000 (mapped to external port 80)
+3. Backend API runs on port 8000
+
+### Environment Variables (Replit Secrets)
+
+Add these in the **Secrets** tab (lock icon in sidebar):
+
+| Key | Value |
+|-----|-------|
+| `GEMINI_API_KEY` | Your Google Gemini API key |
+| `SUPABASE_URL` | Your Supabase project URL |
+| `SUPABASE_KEY` | Your Supabase anon key |
+
+> The app works without Supabase (history will use in-memory mock). Gemini key is required for transcription and recap generation.
+
+### Port Configuration
+
+| Service | Port | Replit External |
+|---------|------|-----------------|
+| Frontend (Next.js) | 3000 | Port 80 (preview) |
+| Backend (FastAPI) | 8000 | Port 8000 |
+
+### Manual Start (if needed)
+
+```bash
+# Start everything at once:
+bash start.sh
+
+# Or start services individually:
+
+# Terminal 1 - Backend
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --host 0.0.0.0 --port 8000
+
+# Terminal 2 - Frontend
+cd frontend
+npm install
+npm run dev
+```
+
+---
+
+## Getting Started (Local Development)
 
 ### Prerequisites
 
@@ -46,7 +96,7 @@ source venv/bin/activate  # or venv\Scripts\activate on Windows
 pip install -r requirements.txt
 cp .env.example .env
 # Edit .env with your API keys
-uvicorn main:app --reload --port 8000
+uvicorn main:app --host 0.0.0.0 --reload --port 8000
 ```
 
 ### Frontend Setup
@@ -98,6 +148,9 @@ CREATE POLICY "Allow all" ON recaps FOR ALL USING (true);
 
 ```
 movierecap/
+├── .replit               # Replit run configuration
+├── replit.nix            # Nix packages (Node, Python, FFmpeg)
+├── start.sh             # Startup script for both services
 ├── backend/
 │   ├── main.py              # FastAPI application
 │   ├── requirements.txt     # Python dependencies
